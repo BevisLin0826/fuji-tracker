@@ -163,16 +163,19 @@
     const defaultEx = [
         {name: "負重壺鈴深蹲", emoji: "🍑", w: 12, r: 20, s: 3},
         {name: "壺鈴擺盪", emoji: "🫨", w: 12, r: 20, s: 3},
-        {name: "保加利亞蹲", emoji: "🪜", w: 0, r: 20, s: 3},
+        {name: "保加利亞蹲", emoji: "🪜", w: 12, r: 15, s: 3},
         {name: "左右屈膝伸腿", emoji: "🦵", w: 0, r: 20, s: 3},
+        {name: "彈力繩俯身划船", emoji: "🛶", w: 25, r: 15, s: 3, unit: "kg"},
         {name: "負重橋式", emoji: "🌉", w: 12, r: 20, s: 3},
         {name: "開合跳", emoji: "🤸", w: 0, r: 20, s: 3}
     ];
 
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
         const listDiv = document.getElementById('exerciseList');
         listDiv.innerHTML = ''; 
         defaultEx.forEach((ex, i) => {
+            // 自動判斷單位，若沒設定則預設為 kg
+            const unit = ex.unit || "kg";
             listDiv.innerHTML += `
                 <div class="exercise-item">
                     <div class="ex-header">
@@ -180,7 +183,7 @@
                         <span class="ex-name">${ex.emoji} ${ex.name}</span>
                     </div>
                     <div class="ex-controls">
-                        <input type="number" id="ex_w_${i}" value="${ex.w}"> kg
+                        <input type="number" id="ex_w_${i}" value="${ex.w}"> ${unit}
                         <input type="number" id="ex_r_${i}" value="${ex.r}"> 次 ×
                         <input type="number" id="ex_s_${i}" value="${ex.s}"> 組
                     </div>
@@ -198,18 +201,20 @@
 
         let exDetails = [];
         let geminiEx = [];
-        defaultEx.forEach((ex, i) => {
+       defaultEx.forEach((ex, i) => {
             const chk = document.getElementById(`ex_chk_${i}`);
             if(chk && chk.checked) {
                 let w = document.getElementById(`ex_w_${i}`).value;
                 let r = document.getElementById(`ex_r_${i}`).value;
                 let s = document.getElementById(`ex_s_${i}`).value;
-                let weightStr = w > 0 ? `${w}kg` : "無負重";
+                
+                const unit = ex.unit || "kg";
+                let weightStr = w > 0 ? `${w}${unit}` : "無負重";
+                
                 exDetails.push(`${ex.name}(${weightStr},${r}x${s})`);
                 geminiEx.push(`${ex.name}${weightStr}${r}*${s}`);
             }
         });
-
         const jogMin = document.getElementById('jogMin').value;
         const jogCad = document.getElementById('jogCad').value;
         const skipMin = document.getElementById('skipMin').value;
