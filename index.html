@@ -5,195 +5,675 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>富士山特訓 Pro V5</title>
+    <title>富士山特訓 Pro V6 - iPhone 15 Pro 極速版</title>
     <style>
         :root {
             --primary: #0A84FF;
+            --primary-gradient: linear-gradient(135deg, #0A84FF 0%, #0056B3 100%);
+            --primary-light: rgba(10, 132, 255, 0.15);
             --success: #30D158;
+            --success-gradient: linear-gradient(135deg, #30D158 0%, #248A3D 100%);
+            --warning: #FF9F0A;
             --bg: #000000;
             --card-bg: #1C1C1E;
-            --text: #FFFFFF;
-            --gray: #8E8E93;
-            --border: #38383A;
+            --card-inner: #2C2C2E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --border: rgba(255, 255, 255, 0.08);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
-            color: var(--text);
+            color: var(--text-primary);
             margin: 0;
-            padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+            padding: calc(12px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .header { margin-bottom: 24px; }
-        .header h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
-        .header p { color: var(--gray); margin: 4px 0 0; font-size: 15px; }
+        /* 頁首標題列 */
+        .header { 
+            margin-bottom: 14px; 
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 4px 2px;
+        }
+        .header h1 { 
+            font-size: 24px; 
+            font-weight: 800; 
+            margin: 0; 
+            letter-spacing: -0.5px; 
+            background: linear-gradient(180deg, #FFFFFF 0%, #E5E5EA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { 
+            color: var(--text-secondary); 
+            margin: 0; 
+            font-size: 13px; 
+            font-weight: 500;
+        }
 
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
             border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        h3 { font-size: 14px; font-weight: 600; margin: 0 0 16px 0; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        /* 頂置重點卡片 */
+        .card.top-action-card {
+            border: 1px solid rgba(10, 132, 255, 0.3);
+            background: linear-gradient(180deg, #1C1C1E 0%, #161618 100%);
+        }
 
-        .input-row {
+        .card-title {
+            font-size: 12px; 
+            font-weight: 700; 
+            margin: 0 0 10px 0;
+            color: var(--text-secondary); 
+            text-transform: uppercase; 
+            letter-spacing: 0.6px;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+        }
+
+        /* 頂層預設菜單 Grid */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .preset-btn {
+            background: var(--card-inner);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 12px 8px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.2s, border-color 0.2s;
+            min-height: 44px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 14px 0;
+            justify-content: center;
+        }
+
+        .preset-btn:active { transform: scale(0.96); opacity: 0.9; }
+        .preset-btn.active {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: #66B2FF;
+            font-weight: 700;
+        }
+
+        /* 快捷 Chips 標籤 */
+        .chip-group {
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+            margin-top: 8px;
+        }
+
+        .chip {
+            background: var(--card-inner);
+            border: 1px solid var(--border);
+            color: #E5E5EA;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.2s;
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chip:active { transform: scale(0.94); }
+        .chip.active {
+            background: var(--primary);
+            color: #FFFFFF;
+            border-color: var(--primary);
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(10, 132, 255, 0.4);
+        }
+
+        /* 輸入列與結構 */
+        .input-row {
+            display: flex; 
+            flex-direction: column;
+            padding: 10px 0; 
             border-bottom: 0.5px solid var(--border);
         }
         .input-row:last-child { border-bottom: none; }
 
-        .label-with-emoji { display: flex; align-items: center; font-size: 16px; font-weight: 500; }
-        .label-with-emoji span { margin-right: 12px; font-size: 20px; width: 24px; text-align: center; }
-
-        input[type="number"], input[type="text"], input[type="date"] {
-            border: none; background: #2C2C2E; color: var(--text); padding: 8px 12px;
-            border-radius: 8px; font-size: 16px; width: 70px; text-align: center; outline: none;
+        .row-header {
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            margin-bottom: 4px;
         }
-        input[type="date"], input[type="text"] { width: auto; text-align: left; flex-grow: 1; margin-left: 10px;}
 
-        /* 力量項目樣式 */
-        .exercise-item { display: flex; flex-direction: column; gap: 12px; padding: 16px 0; border-bottom: 0.5px solid var(--border); }
+        .label-with-emoji { 
+            display: flex; 
+            align-items: center; 
+            font-size: 15px; 
+            font-weight: 600; 
+        }
+        .label-with-emoji span { 
+            margin-right: 8px; 
+            font-size: 18px; 
+            width: 22px; 
+            text-align: center; 
+        }
+
+        /* iOS Input 最佳化 (16px 防止 Safari 自動放大) */
+        input[type="number"], input[type="text"], input[type="date"] {
+            border: 1px solid var(--border); 
+            background: #2C2C2E; 
+            color: var(--text-primary); 
+            padding: 8px 12px;
+            border-radius: var(--radius-sm); 
+            font-size: 16px; 
+            width: 75px; 
+            text-align: center; 
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="date"] { width: auto; text-align: left; }
+        input[type="text"] { width: 100%; text-align: left; margin-top: 8px; }
+
+        /* 分類標題 */
+        .category-header {
+            font-size: 12px; 
+            font-weight: 700; 
+            color: var(--primary);
+            background: var(--primary-light); 
+            padding: 4px 10px; 
+            border-radius: 6px;
+            display: inline-block; 
+            margin-bottom: 8px; 
+            margin-top: 10px;
+        }
+
+        /* 力量項目 */
+        .exercise-item {
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px;
+            padding: 12px 0; 
+            border-bottom: 0.5px solid var(--border);
+        }
         .exercise-item:last-child { border-bottom: none; }
-        .ex-header { display: flex; align-items: center; gap: 12px; }
-        .ex-name { font-weight: 600; font-size: 16px; flex-grow: 1; }
-        .ex-controls { display: flex; gap: 10px; align-items: center; font-size: 14px; color: var(--gray); padding-left: 36px; }
-        .ex-controls input { width: 50px; }
 
-        /* 滑桿優化 */
-        input[type="range"] { width: 100%; height: 30px; -webkit-appearance: none; background: transparent; }
+        .ex-header { display: flex; align-items: center; gap: 10px; }
+        .ex-name { font-weight: 600; font-size: 15px; flex-grow: 1; }
+
+        .ex-controls {
+            display: flex; 
+            gap: 6px; 
+            align-items: center;
+            font-size: 13px; 
+            color: var(--text-secondary); 
+            padding-left: 32px;
+        }
+        .ex-controls input { width: 50px; padding: 4px; font-size: 15px; }
+
+        /* 滑桿（Touch Slider） */
+        input[type="range"] { width: 100%; height: 32px; -webkit-appearance: none; background: transparent; }
         input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: var(--border); border-radius: 2px; }
         input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; height: 26px; width: 26px; border-radius: 50%;
-            background: #FFFFFF; box-shadow: 0 3px 8px rgba(0,0,0,0.3); margin-top: -11px;
+            -webkit-appearance: none; 
+            height: 26px; 
+            width: 26px; 
+            border-radius: 50%;
+            background: #FFFFFF; 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.4); 
+            margin-top: -11px;
         }
 
-        .val-display { font-size: 22px; font-weight: 700; color: var(--primary); float: right; }
+        .val-display { font-size: 20px; font-weight: 700; color: var(--primary); float: right; }
 
-        button { width: 100%; padding: 18px; border-radius: 14px; border: none; font-size: 17px; font-weight: 700; transition: all 0.15s; }
-        button:active { transform: scale(0.97); opacity: 0.8; }
+        /* 主要按鈕 */
+        button.main-btn {
+            width: 100%; 
+            padding: 14px; 
+            border-radius: var(--radius-md); 
+            border: none;
+            font-size: 16px; 
+            font-weight: 700; 
+            transition: transform 0.15s ease, opacity 0.15s; 
+            cursor: pointer;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button.main-btn:active { transform: scale(0.97); opacity: 0.85; }
 
-        #submitBtn { background: var(--primary); color: white; margin-top: 10px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3); }
-        .copy-btn { background: var(--success); color: white; margin-top: 15px; display: none; box-shadow: 0 4px 15px rgba(48, 209, 88, 0.3); }
+        #submitBtn { 
+            background: var(--primary-gradient); 
+            color: white; 
+            box-shadow: 0 4px 16px rgba(10, 132, 255, 0.35); 
+        }
+
+        .copy-btn { 
+            background: var(--success-gradient); 
+            color: white; 
+            margin-top: 10px; 
+            display: none; 
+            box-shadow: 0 4px 16px rgba(48, 209, 88, 0.35); 
+        }
 
         #geminiCopyArea {
-            display: none; background: #1C1C1E; padding: 15px; border-radius: 12px;
-            font-size: 14px; margin-top: 20px; white-space: pre-wrap; color: #E5E5EA; border: 1px dashed var(--gray);
+            display: none; 
+            background: var(--card-inner); 
+            padding: 12px; 
+            border-radius: var(--radius-md);
+            font-size: 13px; 
+            margin-top: 12px; 
+            white-space: pre-wrap; 
+            color: #E5E5EA; 
+            border: 1px dashed var(--text-secondary);
+            line-height: 1.4;
         }
 
         input[type="checkbox"] {
-            width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--gray);
-            appearance: none; outline: none; transition: 0.2s; background: transparent;
+            width: 22px; 
+            height: 22px; 
+            border-radius: 6px; 
+            border: 2px solid var(--text-secondary);
+            appearance: none; 
+            outline: none; 
+            transition: 0.2s; 
+            background: transparent; 
+            cursor: pointer;
         }
         input[type="checkbox"]:checked {
-            background-color: var(--primary); border-color: var(--primary);
+            background-color: var(--primary); 
+            border-color: var(--primary);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
-            background-size: 16px; background-repeat: no-repeat; background-position: center;
+            background-size: 14px; 
+            background-repeat: no-repeat; 
+            background-position: center;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🏔️ 富士山特訓日報</h1>
+        <h1>🏔️ 富士山特訓 Pro V6</h1>
         <p id="todayDisplay"></p>
     </div>
 
+    <!-- 頂置一鍵預設與極速送出區域 (無需向下滑動即可送出) -->
+    <div class="card top-action-card">
+        <div class="card-title">⚡ 一鍵菜單與極速送出</div>
+        <div class="preset-grid">
+            <div class="preset-btn" onclick="applyPreset('regular', this)">🏋️ 常規重量訓練</div>
+            <div class="preset-btn" onclick="applyPreset('deload', this)">🌱 減量重量訓練</div>
+            <div class="preset-btn" onclick="applyPreset('aerobic', this)">🏃 純有氧訓練</div>
+            <div class="preset-btn" onclick="applyPreset('squatOnly', this)">🍑 僅維持徒手深蹲</div>
+        </div>
+
+        <!-- 送出與 Gemini 複製區塊置頂 -->
+        <button id="submitBtn" class="main-btn" onclick="submitData()">🚀 儲存並送出</button>
+        <div id="geminiCopyArea"></div>
+        <button id="copyToGemini" class="main-btn copy-btn" onclick="copyGeminiText()">📋 複製報備文字給 Gemini</button>
+    </div>
+
+    <!-- 日期選擇 -->
     <div class="card">
-        <div class="input-row">
+        <div class="row-header">
             <div class="label-with-emoji"><span>📅</span>訓練日期</div>
             <input type="date" id="date">
         </div>
     </div>
 
+    <!-- 有氧耐力卡片 -->
     <div class="card">
-        <h3>🏃 有氧耐力</h3>
+        <div class="card-title">🏃 有氧耐力</div>
+        
         <div class="input-row">
-            <div class="label-with-emoji"><span>👟</span>超慢跑 (min)</div>
-            <input type="number" id="jogMin" value="30">
-        </div>
-        <div class="input-row">
-            <div class="label-with-emoji"><span>👣</span>平均步頻 (spm)</div>
-            <input type="number" id="jogCad" value="220">
-        </div>
-        <div class="input-row">
-            <div class="label-with-emoji"><span>🪢</span>無繩跳繩 (min)</div>
-            <input type="number" id="skipMin" value="15">
-        </div>
-    </div>
-
-    <div class="card">
-        <h3>💪 力量與核心</h3>
-        <div id="exerciseList">
+            <div class="row-header">
+                <div class="label-with-emoji"><span>👟</span>超慢跑 (分)</div>
+                <input type="number" id="jogMin" value="0">
             </div>
-    </div>
-
-    <div class="card">
-        <h3>📊 訓練指標</h3>
-        <div style="margin-bottom: 25px;">
-            <label class="label-with-emoji"><span>❤️</span>平均心率 <span id="hrVal" class="val-display">130</span></label>
-            <input type="range" min="100" max="180" value="130" oninput="document.getElementById('hrVal').innerText=this.value">
+            <div class="chip-group">
+                <div class="chip" onclick="setNumber('jogMin', 0, this)">0分</div>
+                <div class="chip" onclick="setNumber('jogMin', 20, this)">20分</div>
+                <div class="chip" onclick="setNumber('jogMin', 30, this)">30分</div>
+                <div class="chip" onclick="setNumber('jogMin', 45, this)">45分</div>
+                <div class="chip" onclick="setNumber('jogMin', 50, this)">50分</div>
+            </div>
         </div>
-        <div>
-            <label class="label-with-emoji"><span>⚡</span>痛苦指數 <span id="rpeVal" class="val-display">5</span></label>
-            <input type="range" min="1" max="10" value="5" oninput="document.getElementById('rpeVal').innerText=this.value">
-        </div>
-    </div>
 
-    <div class="card">
-        <h3>💬 體感備註</h3>
         <div class="input-row">
-            <div class="label-with-emoji"><span>✍️</span></div>
-            <input type="text" id="feeling" placeholder="目前的恢復狀況、狀態極佳..." style="text-align: left;">
+            <div class="row-header">
+                <div class="label-with-emoji"><span>👣</span>平均步頻 (spm)</div>
+                <input type="number" id="jogCad" value="200">
+            </div>
+            <div class="chip-group">
+                <div class="chip" onclick="setNumber('jogCad', 160, this)">160</div>
+                <div class="chip" onclick="setNumber('jogCad', 180, this)">180</div>
+                <div class="chip" onclick="setNumber('jogCad', 190, this)">190</div>
+                <div class="chip" onclick="setNumber('jogCad', 200, this)">200</div>
+                <div class="chip" onclick="setNumber('jogCad', 215, this)">215</div>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="row-header">
+                <div class="label-with-emoji"><span>🪢</span>無繩跳繩 (分)</div>
+                <input type="number" id="skipMin" value="0">
+            </div>
+            <div class="chip-group">
+                <div class="chip" onclick="setNumber('skipMin', 0, this)">0分</div>
+                <div class="chip" onclick="setNumber('skipMin', 10, this)">10分</div>
+                <div class="chip" onclick="setNumber('skipMin', 15, this)">15分</div>
+                <div class="chip" onclick="setNumber('skipMin', 20, this)">20分</div>
+            </div>
         </div>
     </div>
 
-    <button id="submitBtn" onclick="submitData()">🚀 儲存並送出</button>
-    <div id="geminiCopyArea"></div>
-    <button id="copyToGemini" class="copy-btn" onclick="copyGeminiText()">📋 複製報備文字給 Gemini</button>
+    <!-- 力量與核心分類列表 -->
+    <div class="card">
+        <div class="card-title">💪 力量與核心 (點選按鈕自動勾選)</div>
+        <div id="exerciseList"></div>
+    </div>
+
+    <!-- 訓練指標卡片 -->
+    <div class="card">
+        <div class="card-title">📊 訓練指標</div>
+        <div style="margin-bottom: 18px;">
+            <div class="row-header">
+                <label class="label-with-emoji"><span>❤️</span>平均心率</label>
+                <span id="hrVal" class="val-display">128</span>
+            </div>
+            <input type="range" id="hrRange" min="100" max="180" value="128" oninput="setHR(this.value)">
+            <div class="chip-group" style="margin-top: 8px;">
+                <div class="chip" onclick="setHR(115)">115 bpm</div>
+                <div class="chip" onclick="setHR(120)">120 bpm</div>
+                <div class="chip" onclick="setHR(125)">125 bpm</div>
+                <div class="chip" onclick="setHR(130)">130 bpm</div>
+                <div class="chip" onclick="setHR(140)">140 bpm</div>
+                <div class="chip" onclick="setHR(150)">150 bpm</div>
+            </div>
+        </div>
+
+        <div>
+            <div class="row-header">
+                <label class="label-with-emoji"><span>⚡</span>痛苦指數 (RPE)</label>
+                <span id="rpeVal" class="val-display">2</span>
+            </div>
+            <input type="range" id="rpeRange" min="1" max="10" value="2" oninput="setRPE(this.value)">
+            <div class="chip-group" style="margin-top: 8px;">
+                <div class="chip" onclick="setRPE(1)">1 (極輕)</div>
+                <div class="chip" onclick="setRPE(2)">2 (輕鬆)</div>
+                <div class="chip" onclick="setRPE(3)">3 (適中)</div>
+                <div class="chip" onclick="setRPE(5)">5 (有感)</div>
+                <div class="chip" onclick="setRPE(6)">6 (艱難)</div>
+                <div class="chip" onclick="setRPE(8)">8 (極致)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 體感備註卡片 -->
+    <div class="card">
+        <div class="card-title">💬 體感備註快捷點選</div>
+        <div class="chip-group" style="margin-bottom: 10px;">
+            <div class="chip" onclick="addNote('無特別體感。')">無特別體感</div>
+            <div class="chip" onclick="addNote('狀態良好，整體感覺輕鬆。')">狀態良好</div>
+            <div class="chip" onclick="addNote('保加利亞蹲心率較高且喘。')">保加利亞蹲較喘</div>
+            <div class="chip" onclick="addNote('肌肉微酸但不影響動作。')">微酸正常</div>
+            <div class="chip" onclick="addNote('進行戰術性減量修復。')">戰術減量修復</div>
+        </div>
+        <input type="text" id="feeling" placeholder="或手動輸入其他體感細節...">
+    </div>
 
 <script>
+    // 定義力量訓練項目與快捷選項數據結構 (基於 indexFuji_2.html 版本)
     const defaultEx = [
-        {name: "負重壺鈴深蹲", emoji: "🍑", w: 12, r: 20, s: 3},
-        {name: "壺鈴擺盪", emoji: "🫨", w: 12, r: 20, s: 3},
-        {name: "保加利亞蹲", emoji: "🪜", w: 12, r: 15, s: 3},
-        {name: "左右屈膝伸腿", emoji: "🦵", w: 0, r: 20, s: 3},
-        {name: "彈力繩俯身划船", emoji: "🛶", w: 25, r: 15, s: 3, unit: "kg"},
-        {name: "負重橋式", emoji: "🌉", w: 12, r: 20, s: 3},
-        {name: "開合跳", emoji: "🤸", w: 0, r: 20, s: 3}
+        {
+            category: "🦵 下肢與後側鏈",
+            items: [
+                {
+                    name: "壺鈴深蹲", emoji: "🍑", unit: "kg",
+                    presets: [
+                        { label: "12kg 35次×3", w: 12, r: 35, s: 3 },
+                        { label: "徒手 100次×1", w: 0, r: 100, s: 1 },
+                        { label: "徒手 50次×2", w: 0, r: 50, s: 2 }
+                    ]
+                },
+                {
+                    name: "壺鈴擺盪", emoji: "🫨", unit: "kg",
+                    presets: [
+                        { label: "12kg 20次×3", w: 12, r: 20, s: 3 },
+                        { label: "12kg 25次×3", w: 12, r: 25, s: 3 },
+                        { label: "12kg 30次×3", w: 12, r: 30, s: 3 }
+                    ]
+                },
+                {
+                    name: "保加利亞蹲", emoji: "🪜", unit: "kg",
+                    presets: [
+                        { label: "12kg 15次×3", w: 12, r: 15, s: 3 },
+                        { label: "12kg 20次×3", w: 12, r: 20, s: 3 },
+                        { label: "徒手 20次×3", w: 0, r: 20, s: 3 }
+                    ]
+                },
+                {
+                    name: "左右屈膝伸腿", emoji: "🦵", unit: "kg",
+                    presets: [
+                        { label: "徒手 20次×3", w: 0, r: 20, s: 3 }
+                    ]
+                }
+            ]
+        },
+        {
+            category: "💪 上背與核心",
+            items: [
+                {
+                    name: "壺鈴繞身", emoji: "🔄", unit: "kg",
+                    presets: [
+                        { label: "12kg 20次×3", w: 12, r: 20, s: 3 },
+                        { label: "12kg 15次×3", w: 12, r: 15, s: 3 }
+                    ]
+                },
+                {
+                    name: "彈力繩俯身划船", emoji: "🛶", unit: "kg",
+                    presets: [
+                        { label: "25kg 15次×3", w: 25, r: 15, s: 3 },
+                        { label: "25kg 20次×3", w: 25, r: 20, s: 3 }
+                    ]
+                },
+                {
+                    name: "開合跳", emoji: "🤸", unit: "kg",
+                    presets: [
+                        { label: "50次×6組", w: 0, r: 50, s: 6 },
+                        { label: "30次×6組", w: 0, r: 30, s: 6 },
+                        { label: "20次×3組", w: 0, r: 20, s: 3 }
+                    ]
+                }
+            ]
+        }
     ];
 
-document.addEventListener('DOMContentLoaded', () => {
-        const listDiv = document.getElementById('exerciseList');
-        listDiv.innerHTML = ''; 
-        defaultEx.forEach((ex, i) => {
-            // 自動判斷單位，若沒設定則預設為 kg
-            const unit = ex.unit || "kg";
-            listDiv.innerHTML += `
-                <div class="exercise-item">
-                    <div class="ex-header">
-                        <input type="checkbox" id="ex_chk_${i}">
-                        <span class="ex-name">${ex.emoji} ${ex.name}</span>
-                    </div>
-                    <div class="ex-controls">
-                        <input type="number" id="ex_w_${i}" value="${ex.w}"> ${unit}
-                        <input type="number" id="ex_r_${i}" value="${ex.r}"> 次 ×
-                        <input type="number" id="ex_s_${i}" value="${ex.s}"> 組
-                    </div>
-                </div>`;
-        });
+    let flatExList = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderExercises();
         const d = new Date();
         document.getElementById('date').valueAsDate = d;
-        document.getElementById('todayDisplay').innerText = d.toLocaleDateString('zh-TW', { weekday: 'long', month: 'long', day: 'numeric' });
+        document.getElementById('todayDisplay').innerText = d.toLocaleDateString('zh-TW', { weekday: 'short', month: 'short', day: 'numeric' });
     });
 
+    // 動態繪製力量訓練列表
+    function renderExercises() {
+        const listDiv = document.getElementById('exerciseList');
+        listDiv.innerHTML = '';
+        flatExList = [];
+        let globalIndex = 0;
+
+        defaultEx.forEach(cat => {
+            listDiv.innerHTML += `<div class="category-header">${cat.category}</div>`;
+            cat.items.forEach(ex => {
+                flatExList.push(ex);
+                const idx = globalIndex;
+                const defaultPreset = ex.presets[0];
+
+                let chipsHtml = ex.presets.map((p) => 
+                    `<div class="chip" onclick="applyExPreset(${idx}, ${p.w}, ${p.r}, ${p.s}, this)">${p.label}</div>`
+                ).join('');
+
+                listDiv.innerHTML += `
+                    <div class="exercise-item" id="ex_item_${idx}">
+                        <div class="ex-header">
+                            <input type="checkbox" id="ex_chk_${idx}">
+                            <span class="ex-name">${ex.emoji} ${ex.name}</span>
+                        </div>
+                        <div class="chip-group" style="padding-left: 32px;">
+                            ${chipsHtml}
+                        </div>
+                        <div class="ex-controls">
+                            重量: <input type="number" id="ex_w_${idx}" value="${defaultPreset.w}"> ${ex.unit} |
+                            次數: <input type="number" id="ex_r_${idx}" value="${defaultPreset.r}"> 次 |
+                            組數: <input type="number" id="ex_s_${idx}" value="${defaultPreset.s}"> 組
+                        </div>
+                    </div>`;
+                globalIndex++;
+            });
+        });
+    }
+
+    // 點選力量快捷 Chip 時自動設定並勾選該項目
+    function applyExPreset(idx, w, r, s, chipElem) {
+        document.getElementById(`ex_w_${idx}`).value = w;
+        document.getElementById(`ex_r_${idx}`).value = r;
+        document.getElementById(`ex_s_${idx}`).value = s;
+        
+        const chk = document.getElementById(`ex_chk_${idx}`);
+        chk.checked = true;
+
+        // 高亮此項目的按鈕
+        const parentGroup = chipElem.parentElement;
+        Array.from(parentGroup.children).forEach(c => c.classList.remove('active'));
+        chipElem.classList.add('active');
+    }
+
+    // 設定數值快捷 function
+    function setNumber(elemId, val, chipElem) {
+        document.getElementById(elemId).value = val;
+        if(chipElem) {
+            const parentGroup = chipElem.parentElement;
+            Array.from(parentGroup.children).forEach(c => c.classList.remove('active'));
+            chipElem.classList.add('active');
+        }
+    }
+
+    function setHR(val) {
+        document.getElementById('hrRange').value = val;
+        document.getElementById('hrVal').innerText = val;
+    }
+
+    function setRPE(val) {
+        document.getElementById('rpeRange').value = val;
+        document.getElementById('rpeVal').innerText = val;
+    }
+
+    function addNote(text) {
+        const input = document.getElementById('feeling');
+        input.value = text;
+    }
+
+    // ⚡ 頂層四大預設菜單邏輯
+    function applyPreset(type, btnElem) {
+        // 重置所有勾選狀態與 active 標籤
+        flatExList.forEach((_, i) => {
+            const chk = document.getElementById(`ex_chk_${i}`);
+            if(chk) chk.checked = false;
+        });
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+
+        // 預設1：常規重量訓練
+        if(type === 'regular') {
+            checkAndSetEx('壺鈴深蹲', 12, 35, 3);
+            checkAndSetEx('壺鈴擺盪', 12, 20, 3);
+            checkAndSetEx('壺鈴繞身', 12, 20, 3);
+            checkAndSetEx('彈力繩俯身划船', 25, 15, 3);
+            checkAndSetEx('負重橋式', 12, 20, 3);
+            checkAndSetEx('左右屈膝伸腿', 0, 20, 3);
+            checkAndSetEx('開合跳', 0, 50, 6);
+            setNumber('jogMin', 0);
+            setNumber('skipMin', 0);
+            setHR(130);
+            setRPE(5);
+            addNote('完成常規重量訓練，體感狀態穩定。');
+        } 
+        // 預設2：減量重量訓練
+        else if(type === 'deload') {
+            checkAndSetEx('壺鈴深蹲', 12, 35, 3);
+            checkAndSetEx('壺鈴擺盪', 12, 20, 3);
+            checkAndSetEx('壺鈴繞身', 12, 20, 3);
+            setNumber('jogMin', 0);
+            setNumber('skipMin', 0);
+            setHR(120);
+            setRPE(2);
+            addNote('進行減量重量訓練，注重肌肉恢復。');
+        } 
+        // 預設3：純有氧訓練
+        else if(type === 'aerobic') {
+            checkAndSetEx('壺鈴深蹲', 0, 100, 1);
+            setNumber('jogMin', 30);
+            setNumber('jogCad', 200);
+            setHR(125);
+            setRPE(2);
+            addNote('完成純有氧訓練，呼吸平穩輕鬆。');
+        } 
+        // 預設4：僅維持擺下徒手深蹲
+        else if(type === 'squatOnly') {
+            checkAndSetEx('壺鈴深蹲', 0, 100, 1);
+            setNumber('jogMin', 0);
+            setNumber('skipMin', 0);
+            setHR(115);
+            setRPE(1);
+            addNote('完成每日保底徒手 100 下深蹲。');
+        }
+
+        // 高亮點選的預設按鈕
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        if(btnElem) {
+            btnElem.classList.add('active');
+        }
+    }
+
+    function checkAndSetEx(name, w, r, s) {
+        const idx = flatExList.findIndex(e => e.name === name);
+        if(idx !== -1) {
+            const chk = document.getElementById(`ex_chk_${idx}`);
+            if(chk) chk.checked = true;
+            document.getElementById(`ex_w_${idx}`).value = w;
+            document.getElementById(`ex_r_${idx}`).value = r;
+            document.getElementById(`ex_s_${idx}`).value = s;
+        }
+    }
+
+    // 提交數據邏輯 (與 Google Sheet / Gemini 文字完全一致)
     async function submitData() {
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
@@ -201,7 +681,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let exDetails = [];
         let geminiEx = [];
-       defaultEx.forEach((ex, i) => {
+
+        flatExList.forEach((ex, i) => {
             const chk = document.getElementById(`ex_chk_${i}`);
             if(chk && chk.checked) {
                 let w = document.getElementById(`ex_w_${i}`).value;
@@ -215,6 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 geminiEx.push(`${ex.name}${weightStr}${r}*${s}`);
             }
         });
+
         const jogMin = document.getElementById('jogMin').value;
         const jogCad = document.getElementById('jogCad').value;
         const skipMin = document.getElementById('skipMin').value;
@@ -222,8 +704,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const rpe = document.getElementById('rpeVal').innerText;
         const feeling = document.getElementById('feeling').value || "無特別體感";
 
-        const aerobicText = `超慢跑${jogMin}分(步頻${jogCad}),跳繩${skipMin}分`;
-        const geminiText = `日期-${document.getElementById('date').value}\n內容-${geminiEx.join('/')}/${aerobicText}\n平均心率 ${hr}/分鐘\n體感上：${feeling}。痛苦指數峰值約 ${rpe} 分。`;
+        let aerobicTextParts = [];
+        if(jogMin > 0) aerobicTextParts.push(`超慢跑${jogMin}分(步頻${jogCad})`);
+        if(skipMin > 0) aerobicTextParts.push(`跳繩${skipMin}分`);
+        const aerobicText = aerobicTextParts.length > 0 ? aerobicTextParts.join(',') : "無特別有氧";
+
+        const exSummary = geminiEx.length > 0 ? geminiEx.join('/') : "徒手保底";
+        const geminiText = `日期-${document.getElementById('date').value}\n內容-${exSummary}/${aerobicText}\n平均心率 ${hr}/分鐘\n體感上：${feeling}痛苦指數峰值約 ${rpe} 分。`;
 
         const data = {
             date: document.getElementById('date').value,
