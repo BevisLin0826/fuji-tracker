@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>富士山特訓 Pro V6</title>
+    <title>富士山特訓 Pro V7.1 - 彈力帶強化極速版</title>
     <style>
         :root {
             --primary: #0A84FF;
@@ -88,7 +88,7 @@
             justify-content: space-between;
         }
 
-        /* 頂層預設菜單 Grid */
+        /* 頂層預設菜單 Grid (5 顆按鈕完美對稱排版) */
         .preset-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -111,6 +111,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .preset-btn.span-2 {
+            grid-column: span 2;
         }
 
         .preset-btn:active { transform: scale(0.96); opacity: 0.9; }
@@ -232,6 +236,7 @@
             font-size: 13px; 
             color: var(--text-secondary); 
             padding-left: 32px;
+            flex-wrap: wrap;
         }
         .ex-controls input { width: 50px; padding: 4px; font-size: 15px; }
 
@@ -318,18 +323,19 @@
 <body>
 
     <div class="header">
-        <h1>🏔️ 富士山特訓 Pro V6</h1>
+        <h1>🏔️ 富士山特訓 Pro V7.1</h1>
         <p id="todayDisplay"></p>
     </div>
 
-    <!-- 頂置一鍵預設與極速送出區域 (無需向下滑動即可送出) -->
+    <!-- 頂置一鍵預設與極速送出區域 -->
     <div class="card top-action-card">
         <div class="card-title">⚡ 一鍵菜單與極速送出</div>
         <div class="preset-grid">
+            <div class="preset-btn" onclick="applyPreset('full', this)">🔥 完整重量訓練</div>
             <div class="preset-btn" onclick="applyPreset('regular', this)">🏋️ 常規重量訓練</div>
             <div class="preset-btn" onclick="applyPreset('deload', this)">🌱 減量重量訓練</div>
             <div class="preset-btn" onclick="applyPreset('aerobic', this)">🏃 純有氧訓練</div>
-            <div class="preset-btn" onclick="applyPreset('squatOnly', this)">🍑 僅維持徒手深蹲</div>
+            <div class="preset-btn span-2" onclick="applyPreset('squatOnly', this)">🍑 僅維持徒手深蹲</div>
         </div>
 
         <!-- 送出與 Gemini 複製區塊置頂 -->
@@ -346,6 +352,12 @@
         </div>
     </div>
 
+    <!-- 力量與核心分類列表 -->
+    <div class="card">
+        <div class="card-title">💪 力量與暖身 (點選按鈕自動勾選)</div>
+        <div id="exerciseList"></div>
+    </div>
+
     <!-- 有氧耐力卡片 -->
     <div class="card">
         <div class="card-title">🏃 有氧耐力</div>
@@ -355,12 +367,12 @@
                 <div class="label-with-emoji"><span>👟</span>超慢跑 (分)</div>
                 <input type="number" id="jogMin" value="0">
             </div>
-            <div class="chip-group">
-                <div class="chip" onclick="setNumber('jogMin', 0, this)">0分</div>
-                <div class="chip" onclick="setNumber('jogMin', 20, this)">20分</div>
-                <div class="chip" onclick="setNumber('jogMin', 30, this)">30分</div>
-                <div class="chip" onclick="setNumber('jogMin', 45, this)">45分</div>
-                <div class="chip" onclick="setNumber('jogMin', 50, this)">50分</div>
+            <div class="chip-group" id="chips_jogMin">
+                <div class="chip" data-val="0" onclick="setNumber('jogMin', 0, this)">0分</div>
+                <div class="chip" data-val="20" onclick="setNumber('jogMin', 20, this)">20分</div>
+                <div class="chip" data-val="30" onclick="setNumber('jogMin', 30, this)">30分</div>
+                <div class="chip" data-val="45" onclick="setNumber('jogMin', 45, this)">45分</div>
+                <div class="chip" data-val="50" onclick="setNumber('jogMin', 50, this)">50分</div>
             </div>
         </div>
 
@@ -369,12 +381,13 @@
                 <div class="label-with-emoji"><span>👣</span>平均步頻 (spm)</div>
                 <input type="number" id="jogCad" value="200">
             </div>
-            <div class="chip-group">
-                <div class="chip" onclick="setNumber('jogCad', 160, this)">160</div>
-                <div class="chip" onclick="setNumber('jogCad', 180, this)">180</div>
-                <div class="chip" onclick="setNumber('jogCad', 190, this)">190</div>
-                <div class="chip" onclick="setNumber('jogCad', 200, this)">200</div>
-                <div class="chip" onclick="setNumber('jogCad', 215, this)">215</div>
+            <div class="chip-group" id="chips_jogCad">
+                <div class="chip" data-val="160" onclick="setNumber('jogCad', 160, this)">160</div>
+                <div class="chip" data-val="180" onclick="setNumber('jogCad', 180, this)">180</div>
+                <div class="chip" data-val="194" onclick="setNumber('jogCad', 194, this)">194</div>
+                <div class="chip" data-val="200" onclick="setNumber('jogCad', 200, this)">200</div>
+                <div class="chip" data-val="215" onclick="setNumber('jogCad', 215, this)">215</div>
+                <div class="chip" data-val="220" onclick="setNumber('jogCad', 220, this)">220</div>
             </div>
         </div>
 
@@ -383,19 +396,13 @@
                 <div class="label-with-emoji"><span>🪢</span>無繩跳繩 (分)</div>
                 <input type="number" id="skipMin" value="0">
             </div>
-            <div class="chip-group">
-                <div class="chip" onclick="setNumber('skipMin', 0, this)">0分</div>
-                <div class="chip" onclick="setNumber('skipMin', 10, this)">10分</div>
-                <div class="chip" onclick="setNumber('skipMin', 15, this)">15分</div>
-                <div class="chip" onclick="setNumber('skipMin', 20, this)">20分</div>
+            <div class="chip-group" id="chips_skipMin">
+                <div class="chip" data-val="0" onclick="setNumber('skipMin', 0, this)">0分</div>
+                <div class="chip" data-val="10" onclick="setNumber('skipMin', 10, this)">10分</div>
+                <div class="chip" data-val="15" onclick="setNumber('skipMin', 15, this)">15分</div>
+                <div class="chip" data-val="20" onclick="setNumber('skipMin', 20, this)">20分</div>
             </div>
         </div>
-    </div>
-
-    <!-- 力量與核心分類列表 -->
-    <div class="card">
-        <div class="card-title">💪 力量與核心 (點選按鈕自動勾選)</div>
-        <div id="exerciseList"></div>
     </div>
 
     <!-- 訓練指標卡片 -->
@@ -440,7 +447,7 @@
         <div class="chip-group" style="margin-bottom: 10px;">
             <div class="chip" onclick="addNote('無特別體感。')">無特別體感</div>
             <div class="chip" onclick="addNote('狀態良好，整體感覺輕鬆。')">狀態良好</div>
-            <div class="chip" onclick="addNote('保加利亞蹲心率較高且喘。')">保加利亞蹲較喘</div>
+            <div class="chip" onclick="addNote('肩臂與上肢充血感明顯，動作標準。')">肩臂泵感明顯</div>
             <div class="chip" onclick="addNote('肌肉微酸但不影響動作。')">微酸正常</div>
             <div class="chip" onclick="addNote('進行戰術性減量修復。')">戰術減量修復</div>
         </div>
@@ -448,66 +455,65 @@
     </div>
 
 <script>
-    // 定義力量訓練項目與快捷選項數據結構 (基於 indexFuji_2.html 版本)
+    // 定義最新訓練項目與快捷選項數據結構
     const defaultEx = [
         {
-            category: "🦵 下肢與後側鏈",
+            category: "🔥 暖身與壺鈴核心",
             items: [
                 {
-                    name: "壺鈴深蹲", emoji: "🍑", unit: "kg",
+                    name: "開合跳", emoji: "🤸", unit: "kg",
                     presets: [
-                        { label: "12kg 35次×3", w: 12, r: 35, s: 3 },
-                        { label: "徒手 100次×1", w: 0, r: 100, s: 1 },
-                        { label: "徒手 50次×2", w: 0, r: 50, s: 2 }
+                        { label: "60次×3組", w: 0, r: 60, s: 3 },
+                        { label: "50次×3組", w: 0, r: 50, s: 3 },
+                        { label: "40次×3組", w: 0, r: 40, s: 3 }
                     ]
                 },
                 {
-                    name: "壺鈴擺盪", emoji: "🫨", unit: "kg",
+                    name: "壺鈴左右繞頭", emoji: "🔄", unit: "kg", repNote: "左右各",
                     presets: [
-                        { label: "12kg 20次×3", w: 12, r: 20, s: 3 },
-                        { label: "12kg 25次×3", w: 12, r: 25, s: 3 },
-                        { label: "12kg 30次×3", w: 12, r: 30, s: 3 }
-                    ]
-                },
-                {
-                    name: "保加利亞蹲", emoji: "🪜", unit: "kg",
-                    presets: [
-                        { label: "12kg 15次×3", w: 12, r: 15, s: 3 },
-                        { label: "12kg 20次×3", w: 12, r: 20, s: 3 },
-                        { label: "徒手 20次×3", w: 0, r: 20, s: 3 }
-                    ]
-                },
-                {
-                    name: "左右屈膝伸腿", emoji: "🦵", unit: "kg",
-                    presets: [
-                        { label: "徒手 20次×3", w: 0, r: 20, s: 3 }
+                        { label: "12kg 左右各15次×3", w: 12, r: 15, s: 3 },
+                        { label: "12kg 左右各10次×3", w: 12, r: 10, s: 3 }
                     ]
                 }
             ]
         },
         {
-            category: "💪 上背與核心",
+            category: "🎗️ 20kg 彈力帶全身訓練",
             items: [
                 {
-                    name: "壺鈴繞身", emoji: "🔄", unit: "kg",
+                    name: "彈力帶深蹲", emoji: "🍑", unit: "kg",
                     presets: [
-                        { label: "12kg 20次×3", w: 12, r: 20, s: 3 },
-                        { label: "12kg 15次×3", w: 12, r: 15, s: 3 }
+                        { label: "20kg 20次×3", w: 20, r: 20, s: 3 },
+                        { label: "徒手 100次×1", w: 0, r: 100, s: 1 },
+                        { label: "徒手 50次×2", w: 0, r: 50, s: 2 }
                     ]
                 },
                 {
-                    name: "彈力繩俯身划船", emoji: "🛶", unit: "kg",
+                    name: "彈力帶坐姿划船", emoji: "🛶", unit: "kg",
                     presets: [
-                        { label: "25kg 15次×3", w: 25, r: 15, s: 3 },
-                        { label: "25kg 20次×3", w: 25, r: 20, s: 3 }
+                        { label: "20kg 20次×3", w: 20, r: 20, s: 3 },
+                        { label: "20kg 15次×3", w: 20, r: 15, s: 3 }
                     ]
                 },
                 {
-                    name: "開合跳", emoji: "🤸", unit: "kg",
+                    name: "彈力帶站姿肩推", emoji: "🏋️", unit: "kg",
                     presets: [
-                        { label: "50次×6組", w: 0, r: 50, s: 6 },
-                        { label: "30次×6組", w: 0, r: 30, s: 6 },
-                        { label: "20次×3組", w: 0, r: 20, s: 3 }
+                        { label: "20kg 20次×3", w: 20, r: 20, s: 3 },
+                        { label: "20kg 15次×3", w: 20, r: 15, s: 3 }
+                    ]
+                },
+                {
+                    name: "彈力帶二頭彎舉", emoji: "💪", unit: "kg",
+                    presets: [
+                        { label: "20kg 20次×3", w: 20, r: 20, s: 3 },
+                        { label: "20kg 15次×3", w: 20, r: 15, s: 3 }
+                    ]
+                },
+                {
+                    name: "彈力帶過頭三頭肌伸展", emoji: "🔱", unit: "kg",
+                    presets: [
+                        { label: "20kg 20次×3", w: 20, r: 20, s: 3 },
+                        { label: "20kg 15次×3", w: 20, r: 15, s: 3 }
                     ]
                 }
             ]
@@ -523,7 +529,7 @@
         document.getElementById('todayDisplay').innerText = d.toLocaleDateString('zh-TW', { weekday: 'short', month: 'short', day: 'numeric' });
     });
 
-    // 動態繪製力量訓練列表
+    // 動態繪製訓練列表
     function renderExercises() {
         const listDiv = document.getElementById('exerciseList');
         listDiv.innerHTML = '';
@@ -536,9 +542,10 @@
                 flatExList.push(ex);
                 const idx = globalIndex;
                 const defaultPreset = ex.presets[0];
+                const repPrefix = ex.repNote ? `${ex.repNote} ` : '';
 
                 let chipsHtml = ex.presets.map((p) => 
-                    `<div class="chip" onclick="applyExPreset(${idx}, ${p.w}, ${p.r}, ${p.s}, this)">${p.label}</div>`
+                    `<div class="chip" data-w="${p.w}" data-r="${p.r}" data-s="${p.s}" onclick="applyExPreset(${idx}, ${p.w}, ${p.r}, ${p.s}, this)">${p.label}</div>`
                 ).join('');
 
                 listDiv.innerHTML += `
@@ -547,12 +554,12 @@
                             <input type="checkbox" id="ex_chk_${idx}">
                             <span class="ex-name">${ex.emoji} ${ex.name}</span>
                         </div>
-                        <div class="chip-group" style="padding-left: 32px;">
+                        <div class="chip-group" id="ex_chips_${idx}" style="padding-left: 32px;">
                             ${chipsHtml}
                         </div>
                         <div class="ex-controls">
                             重量: <input type="number" id="ex_w_${idx}" value="${defaultPreset.w}"> ${ex.unit} |
-                            次數: <input type="number" id="ex_r_${idx}" value="${defaultPreset.r}"> 次 |
+                            次數: ${repPrefix}<input type="number" id="ex_r_${idx}" value="${defaultPreset.r}"> 次 |
                             組數: <input type="number" id="ex_s_${idx}" value="${defaultPreset.s}"> 組
                         </div>
                     </div>`;
@@ -561,7 +568,7 @@
         });
     }
 
-    // 點選力量快捷 Chip 時自動設定並勾選該項目
+    // 點選快捷 Chip 時自動設定並勾選該項目
     function applyExPreset(idx, w, r, s, chipElem) {
         document.getElementById(`ex_w_${idx}`).value = w;
         document.getElementById(`ex_r_${idx}`).value = r;
@@ -570,16 +577,23 @@
         const chk = document.getElementById(`ex_chk_${idx}`);
         chk.checked = true;
 
-        // 高亮此項目的按鈕
         const parentGroup = chipElem.parentElement;
         Array.from(parentGroup.children).forEach(c => c.classList.remove('active'));
         chipElem.classList.add('active');
     }
 
-    // 設定數值快捷 function
+    // 設定有氧數值並同步點亮對應 Chip
     function setNumber(elemId, val, chipElem) {
         document.getElementById(elemId).value = val;
-        if(chipElem) {
+        const container = document.getElementById(`chips_${elemId}`);
+        if(container) {
+            Array.from(container.children).forEach(c => {
+                c.classList.remove('active');
+                if(Number(c.dataset.val) === Number(val)) {
+                    c.classList.add('active');
+                }
+            });
+        } else if(chipElem) {
             const parentGroup = chipElem.parentElement;
             Array.from(parentGroup.children).forEach(c => c.classList.remove('active'));
             chipElem.classList.add('active');
@@ -601,7 +615,7 @@
         input.value = text;
     }
 
-    // ⚡ 頂層四大預設菜單邏輯
+    // ⚡ 頂層五大預設菜單邏輯
     function applyPreset(type, btnElem) {
         // 重置所有勾選狀態與 active 標籤
         flatExList.forEach((_, i) => {
@@ -610,44 +624,58 @@
         });
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
 
-        // 預設1：常規重量訓練
-        if(type === 'regular') {
-            checkAndSetEx('壺鈴深蹲', 12, 35, 3);
-            checkAndSetEx('壺鈴擺盪', 12, 20, 3);
-            checkAndSetEx('壺鈴繞身', 12, 20, 3);
-            checkAndSetEx('彈力繩俯身划船', 25, 15, 3);
-            checkAndSetEx('負重橋式', 12, 20, 3);
-            checkAndSetEx('左右屈膝伸腿', 0, 20, 3);
-            checkAndSetEx('開合跳', 0, 50, 6);
+        // 預設 1：完整重量訓練 (開合跳 + 壺鈴左右繞頭 + 全套 20kg 彈力帶)
+        if(type === 'full') {
+            checkAndSetEx('開合跳', 0, 60, 3);
+            checkAndSetEx('壺鈴左右繞頭', 12, 15, 3);
+            checkAndSetEx('彈力帶深蹲', 20, 20, 3);
+            checkAndSetEx('彈力帶坐姿划船', 20, 20, 3);
+            checkAndSetEx('彈力帶站姿肩推', 20, 20, 3);
+            checkAndSetEx('彈力帶二頭彎舉', 20, 20, 3);
+            checkAndSetEx('彈力帶過頭三頭肌伸展', 20, 20, 3);
             setNumber('jogMin', 0);
             setNumber('skipMin', 0);
             setHR(130);
             setRPE(5);
-            addNote('完成常規重量訓練，體感狀態穩定。');
+            addNote('完成完整重量訓練（壺鈴繞頭＋全套 20kg 彈力帶），體感穩定。');
+        }
+        // 預設 2：常規重量訓練 (移除壺鈴左右繞頭，保留開合跳 + 全套 20kg 彈力帶)
+        else if(type === 'regular') {
+            checkAndSetEx('開合跳', 0, 60, 3);
+            checkAndSetEx('彈力帶深蹲', 20, 20, 3);
+            checkAndSetEx('彈力帶坐姿划船', 20, 20, 3);
+            checkAndSetEx('彈力帶站姿肩推', 20, 20, 3);
+            checkAndSetEx('彈力帶二頭彎舉', 20, 20, 3);
+            checkAndSetEx('彈力帶過頭三頭肌伸展', 20, 20, 3);
+            setNumber('jogMin', 0);
+            setNumber('skipMin', 0);
+            setHR(128);
+            setRPE(4);
+            addNote('完成常規 20kg 彈力帶全身重量訓練，體感穩定。');
         } 
-        // 預設2：減量重量訓練
+        // 預設 3：減量重量訓練 (移除開合跳 60×3 & 彈力帶坐姿划船 20kg 20×3，保留壺鈴左右繞頭 + 彈力帶深蹲)
         else if(type === 'deload') {
-            checkAndSetEx('壺鈴深蹲', 12, 35, 3);
-            checkAndSetEx('壺鈴擺盪', 12, 20, 3);
-            checkAndSetEx('壺鈴繞身', 12, 20, 3);
+            checkAndSetEx('壺鈴左右繞頭', 12, 15, 3);
+            checkAndSetEx('彈力帶深蹲', 20, 20, 3);
             setNumber('jogMin', 0);
             setNumber('skipMin', 0);
             setHR(120);
             setRPE(2);
-            addNote('進行減量重量訓練，注重肌肉恢復。');
+            addNote('進行減量重量訓練（壺鈴繞頭＋彈力帶深蹲），注重肌肉恢復。');
         } 
-        // 預設3：純有氧訓練
+        // 預設 4：純有氧訓練 (加入 20kg 彈力帶深蹲 20×3)
         else if(type === 'aerobic') {
-            checkAndSetEx('壺鈴深蹲', 0, 100, 1);
+            checkAndSetEx('彈力帶深蹲', 20, 20, 3);
             setNumber('jogMin', 30);
             setNumber('jogCad', 200);
+            setNumber('skipMin', 15);
             setHR(125);
             setRPE(2);
-            addNote('完成純有氧訓練，呼吸平穩輕鬆。');
+            addNote('完成純有氧訓練與 20kg 彈力帶深蹲，呼吸平穩輕鬆。');
         } 
-        // 預設4：僅維持擺下徒手深蹲
+        // 預設 5：僅維持徒手深蹲
         else if(type === 'squatOnly') {
-            checkAndSetEx('壺鈴深蹲', 0, 100, 1);
+            checkAndSetEx('彈力帶深蹲', 0, 100, 1);
             setNumber('jogMin', 0);
             setNumber('skipMin', 0);
             setHR(115);
@@ -670,6 +698,16 @@
             document.getElementById(`ex_w_${idx}`).value = w;
             document.getElementById(`ex_r_${idx}`).value = r;
             document.getElementById(`ex_s_${idx}`).value = s;
+
+            // 同步點亮對應的快捷 Chip
+            const chipContainer = document.getElementById(`ex_chips_${idx}`);
+            if(chipContainer) {
+                Array.from(chipContainer.children).forEach(chip => {
+                    if(Number(chip.dataset.w) === w && Number(chip.dataset.r) === r && Number(chip.dataset.s) === s) {
+                        chip.classList.add('active');
+                    }
+                });
+            }
         }
     }
 
@@ -690,10 +728,11 @@
                 let s = document.getElementById(`ex_s_${i}`).value;
                 
                 const unit = ex.unit || "kg";
+                const repPrefix = ex.repNote ? ex.repNote : "";
                 let weightStr = w > 0 ? `${w}${unit}` : "無負重";
                 
-                exDetails.push(`${ex.name}(${weightStr},${r}x${s})`);
-                geminiEx.push(`${ex.name}${weightStr}${r}*${s}`);
+                exDetails.push(`${ex.name}(${weightStr},${repPrefix}${r}x${s})`);
+                geminiEx.push(`${ex.name}${weightStr}${repPrefix}${r}*${s}`);
             }
         });
 
